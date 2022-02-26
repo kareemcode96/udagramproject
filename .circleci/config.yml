@@ -57,4 +57,4 @@ workflows:
   udagram-workflow:
     jobs:
       - frontend
-      - backend
+      - server

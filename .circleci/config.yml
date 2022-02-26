@@ -10,7 +10,7 @@ orbs:
 jobs:
   frontend:
     docker:
-      - image: "cimg/base:stable"
+      - image: cimg/base:stable
     steps:
       - node/install
       - checkout
@@ -23,7 +23,7 @@ jobs:
           command: npm run frontend:deploy
   server:
     docker:
-      - image: "cimg/base:stable"
+      - image: cimg/base:stable
     steps:
       - node/install
       - checkout

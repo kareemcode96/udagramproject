@@ -17,7 +17,7 @@ jobs:
       - aws-cli/setup
       - run:
           name: Build Frontend
-          command: npm run frontend:deploy
+          command: npm run frontend:build
       - run:
           name: Deploy Frontend
           command: npm run frontend:deploy
@@ -30,14 +30,13 @@ jobs:
       - aws-cli/setup
       - run:
           name: Build and Archive Server
-          command: |-
+          command: 
             npm run backend:build
       - run:
           name: Deploy Server
-          command: |-
+          command:
             aws s3 cp ./www/Archive.zip http://thirdfinalproject-udagram.s3-website-us-east-1.amazonaws.com
-            aws elasticbeanstalk create-application-version --application-name $EB_APP --version-label <<pipeline.git.revision>> --source-bundle S3Bucket="$AWS_BUCKET",S3Key="Archive.zip"
-            aws elasticbeanstalk update-environment --application-name $EB_APP --environment-name $EB_ENV --version-label <<pipeline.git.revision>>
+            
   say-hello:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor

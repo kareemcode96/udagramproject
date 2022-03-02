@@ -17,7 +17,7 @@ jobs:
     steps:
       - checkout:
         path: ~/app
-      -node/install-packages:
+      - node/install-packages:
         app-dir: ~/app/udagram-frontend
       - run:
           name: Build Frontend

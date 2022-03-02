@@ -6,43 +6,42 @@ orbs:
   node: circleci/node@4.2.0
   aws-cli: circleci/aws-cli@2.0.0
   eb: circleci/aws-elastic-beanstalk@1.0.0
-  
+  browser: circleci/browser-tools@1.2.4
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
   frontend:
-    working_directory: ~/app/udagram-frontend
-    executer: node/default
-
+    docker:
+      - image: cimg/node:16
     steps:
-      - checkout:
-        path: ~/app
-      - node/install-packages:
-        app-dir: ~/app/udagram-frontend
+      - browser/install-chrome
+      - node/install
+      - checkout
+      - aws-cli/setup
+      - eb/setup
       - run:
           name: Build Frontend
           command: 
-            npm run build
-      - aws-cli/install
+            npm run frontend:build
       - run:
           name: Deploy Frontend
-          command: npm run deploy
+          command: npm run frontend:deploy
   server:
-    working_directory: ~/app/udagram-api
-    executor: node/default
+    docker:
+      - image: cimg/base:stable
     steps:
-      - checkout:
-          path: ~/app
-      - node/install-packages:
-          app-dir: ~/app/udagram-api
+      - node/install
+      - checkout
+      - aws-cli/setup
+      - eb/setup
       - run:
           name: Build and Archive Server
-          command:
-            npm run build
-      - aws-cli/install
+          command: 
+            npm run backend:build
       - run:
           name: Deploy Server
-          command: npm run deploy
+          command:
+            npm run backend:deploy
             
   say-hello:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.

@@ -19,7 +19,8 @@ jobs:
       - eb/setup
       - run:
           name: Build Frontend
-          command: npm run frontend:build
+          script: 
+            - ./node_modules/ .bin/ng build
       - run:
           name: Deploy Frontend
           command: npm run frontend:deploy

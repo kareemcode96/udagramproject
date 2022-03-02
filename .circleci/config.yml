@@ -12,7 +12,7 @@ orbs:
 jobs:
   frontend:
     docker:
-      - image: cimg/node:17.16.0
+      - image: cimg/node:17.6.0
     steps:
       - node/install
       - checkout

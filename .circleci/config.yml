@@ -18,7 +18,7 @@ jobs:
       - checkout
       - aws-cli/setup
       - eb/setup
-      -run:
+      - run:
           name: dependencies
           command:
             npm run frontend:install

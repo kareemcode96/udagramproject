@@ -41,7 +41,7 @@ jobs:
       - run:
           name: dependencies
           command:
-            npm run frontend:install
+            npm run backend:install
       - run:
           name: Build and Archive Server
           command: 

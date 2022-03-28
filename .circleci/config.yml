@@ -2,9 +2,55 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+orbs:
+  node: circleci/node@5.0.0
+  aws-cli: circleci/aws-cli@2.0.0
+  eb: circleci/aws-elastic-beanstalk@1.0.0
+  browser: circleci/browser-tools@1.2.4
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
+  frontend:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - node/install
+      - checkout
+      - aws-cli/setup
+      - eb/setup
+
+      - run:
+          name: dependencies
+          command:
+            npm run frontend:install
+      - run:
+          name: Build Frontend
+          command: 
+            npm run frontend:build
+      - run:
+          name: Deploy Frontend
+          command: npm run frontend:deploy
+  server:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - node/install
+      - checkout
+      - aws-cli/setup
+      - eb/setup
+      - run:
+          name: dependencies
+          command:
+            npm run backend:install
+      - run:
+          name: Build and Archive Server
+          command: 
+            npm run backend:build
+      - run:
+          name: Deploy Server
+          command:
+            npm run backend:deploy
+            
   say-hello:
     # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
     # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
@@ -21,6 +67,7 @@ jobs:
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  say-hello-workflow:
+  udagram-workflow:
     jobs:
-      - say-hello
+      - frontend
+      - server
